@@ -1,7 +1,52 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        <link rel="stylesheet" href="../static/css/bootstrap.min.css" type="text/css">
+        
+<link rel="stylesheet" href="../static/css/quiz.css" type="text/css">
+
+
+        <script>
+            document.addEventListener("DOMContentLoaded", () => {
+                const images = document.getElementsByTagName('img');
+                const maxRetries = 3;
+    
+                for (let img of images) {
+    
+                    let retryCount = 0;
+    
+                    const errorHandler = function() {
+                        if (retryCount < maxRetries) {
+                            retryCount++;
+                            console.log(`Retrying to load the image ${img.src}... Attempt ${retryCount}`);
+                            setTimeout(() => {
+                                // Use a random query parameter to ensure the browser attempts to reload the image
+                                img.src = `${img.src.split('?')[0]}?retry=${new Date().getTime()}`;
+                            }, 1000); // Retry after 1 second
+                        } else {
+                            console.error(`Failed to load the image ${img.src} after several attempts.`);
+                        }
+                    };
+    
+                    img.addEventListener('error', errorHandler);
+    
+                    // If the image is already in an error state when the script runs, trigger the error handler manually
+                    if (img.complete && img.naturalWidth === 0) {
+                        errorHandler();
+                    }
+                }
+            });
+    
+            window.addEventListener("load", () => {
+                const images = document.getElementsByTagName('img');
+                for (let img of images) {
+                    // If any image is in an error state after the page has loaded, manually trigger the error handler
+                    if (img.complete && img.naturalWidth === 0) {
+                        img.dispatchEvent(new Event('error'));
+                    }
+                }
+            });
+        </script>
     </head>
     <title>
         
@@ -38,7 +83,7 @@
                         <img src="../static/img/geothermal-icon-nobg.png" width="30" height="30" alt="Geothermal icon"> Geothermal
                     </a>
                 </li>
-                <li class="nav-item active">
+                <li class="nav-item">
                     <a class="nav-link" href="citations.html">
                         <img src="../static/img/citation-icon.svg" width="30" height="30" alt="Citation icon"> Citations
                     </a>
@@ -66,7 +111,7 @@
     </p>
     <br>
     <center>
-    <img src="../static/img/geothermal-pump.jpg" alt="Geothermal Heat Pump" style="width:50%; height:auto; margin:20px">
+    <img src="../static/img/geothermal-pump.jpg" alt="Orange and blue wires connected to house to form geothermal heat pump" style="width:50%; height:auto; margin:20px">
     </center>
     <h4 style="margin:20px">
         Facts about Geothermal Energy:
@@ -123,6 +168,18 @@
 
     </table>
     </center>
+    <br>
+
+    <br>
+    <div id="quiz">
+        <h1>
+            Geothermal Energy Quiz
+        </h1>
+        <div id="question"></div>
+        <div id="options"></div>
+    </div>
+
+    <script src= "../static/js/geothermal-quiz.js"></script>
     <br>
         
 
